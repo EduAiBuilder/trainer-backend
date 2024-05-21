@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { appConfig } from './configs/app.config';
 import { TrainersModule } from './trainers/trainers.module';
 import { UsersModule } from './users/users.module';
+import { MongodbModule } from './databases/mongo/mongodb.module';
 
 @Module({
 	imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from './users/users.module';
 		}),
 		TrainersModule,
 		UsersModule,
+		MongodbModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

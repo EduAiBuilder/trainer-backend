@@ -1,7 +1,8 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class TrainerSchema extends Document {
+export class Trainer extends Document {
 	@Prop({ type: String })
 	name: string;
 
@@ -11,3 +12,7 @@ export class TrainerSchema extends Document {
 	@Prop({ type: [String] })
 	categories: string[];
 }
+
+const TrainerSchema = SchemaFactory.createForClass(Trainer);
+
+export { TrainerSchema };

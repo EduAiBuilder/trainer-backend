@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Trainer } from './schemas/trainer.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TrainersService {
-  create(createTrainerDto: CreateTrainerDto) {
-    return 'This action adds a new trainer';
-  }
+	constructor(
+		@InjectModel(Trainer.name)
+		private trainerModel: Model<Trainer>
+	) {}
 
-  findAll() {
-    return `This action returns all trainers`;
-  }
+	create(createTrainerDto: CreateTrainerDto) {
+		return 'This action adds a new trainer';
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} trainer`;
-  }
+	findAll() {
+		return `This action returns all trainers`;
+	}
 
-  update(id: number, updateTrainerDto: UpdateTrainerDto) {
-    return `This action updates a #${id} trainer`;
-  }
+	findOne(id: number) {
+		return `This action returns a #${id} trainer`;
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} trainer`;
-  }
+	update(id: number, updateTrainerDto: UpdateTrainerDto) {
+		return `This action updates a #${id} trainer`;
+	}
+
+	remove(id: number) {
+		return `This action removes a #${id} trainer`;
+	}
 }
