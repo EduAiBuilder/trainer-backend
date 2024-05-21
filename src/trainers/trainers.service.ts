@@ -12,23 +12,23 @@ export class TrainersService {
 		private trainerModel: Model<Trainer>
 	) {}
 
-	create(createTrainerDto: CreateTrainerDto) {
-		return 'This action adds a new trainer';
+	async create(createTrainerDto: CreateTrainerDto) {
+		return this.trainerModel.create(createTrainerDto);
 	}
 
-	findAll() {
-		return `This action returns all trainers`;
+	async findAll() {
+		return this.trainerModel.find().exec();
 	}
 
-	findOne(id: number) {
-		return `This action returns a #${id} trainer`;
+	async findOne(id: string) {
+		return this.trainerModel.findById(id).exec();
 	}
 
-	update(id: number, updateTrainerDto: UpdateTrainerDto) {
-		return `This action updates a #${id} trainer`;
+	async update(id: string, updateTrainerDto: UpdateTrainerDto) {
+		return this.trainerModel.findByIdAndUpdate(id, updateTrainerDto, { new: true });
 	}
 
-	remove(id: number) {
-		return `This action removes a #${id} trainer`;
+	async remove(id: string) {
+		return this.trainerModel.findByIdAndDelete(id);
 	}
 }

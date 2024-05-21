@@ -5,30 +5,30 @@ import { UpdateTrainerDto } from './dto/update-trainer.dto';
 
 @Controller('trainers')
 export class TrainersController {
-  constructor(private readonly trainersService: TrainersService) {}
+	constructor(private readonly trainersService: TrainersService) {}
 
-  @Post()
-  create(@Body() createTrainerDto: CreateTrainerDto) {
-    return this.trainersService.create(createTrainerDto);
-  }
+	@Post()
+	create(@Body() createTrainerDto: CreateTrainerDto) {
+		return this.trainersService.create(createTrainerDto);
+	}
 
-  @Get()
-  findAll() {
-    return this.trainersService.findAll();
-  }
+	@Get()
+	findAll() {
+		return this.trainersService.findAll();
+	}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trainersService.findOne(+id);
-  }
+	@Get(':id')
+	findOne(@Param('id') id: string) {
+		return this.trainersService.findOne(id);
+	}
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
-    return this.trainersService.update(+id, updateTrainerDto);
-  }
+	@Patch(':id')
+	update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
+		return this.trainersService.update(id, updateTrainerDto);
+	}
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trainersService.remove(+id);
-  }
+	@Delete(':id')
+	remove(@Param('id') id: string) {
+		return this.trainersService.remove(id);
+	}
 }
