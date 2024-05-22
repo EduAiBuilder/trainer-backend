@@ -4,6 +4,9 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class Trainer extends Document {
 	@Prop({ type: String })
+	userId: string;
+
+	@Prop({ type: String })
 	name: string;
 
 	@Prop({ type: String })
@@ -14,5 +17,6 @@ export class Trainer extends Document {
 }
 
 const TrainerSchema = SchemaFactory.createForClass(Trainer);
+TrainerSchema.index({ userId: 1 });
 
 export { TrainerSchema };
