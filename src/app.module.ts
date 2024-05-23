@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { appConfig } from './configs/app.config';
+import { appConfig } from './utils/configs/app.config';
 import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
-import { MongodbModule } from './databases/mongo/mongodb.module';
+import { MongodbModule } from './utils/databases/mongo/mongodb.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
