@@ -19,10 +19,10 @@ export class User extends Document {
 	phone: string;
 
 	@Prop({ type: Boolean })
-	isVerifiedEmail: boolean;
+	isEmailVerified: boolean;
 
 	@Prop({ type: Boolean })
-	isVerifiedPhone: boolean;
+	isPhoneVerified: boolean;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

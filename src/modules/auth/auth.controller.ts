@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterBySmsDto } from './dto/register-by-sms.dto';
 import { RegisterByEmailDto } from './dto/register-by-email.dto';
@@ -7,31 +7,37 @@ import { SigninByEmailDto } from './dto/signin-by-email.dto';
 import { SigninBySmsDto } from './dto/signin-by-sms.dto';
 
 @Controller('auth')
+@UsePipes(new ValidationPipe({ whitelist: true }))
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('register/sms')
-	registerBySms(@Body() createAuthDto: RegisterBySmsDto) {
-		return this.authService.create(createAuthDto);
+	async registerBySms(@Body() registerBySmsDto: RegisterBySmsDto) {
+		return this.authService.registerBySms(registerBySmsDto);
 	}
 
 	@Post('register/email')
-	registerByEmail(@Body() createAuthDto: RegisterByEmailDto) {
-		return this.authService.create(createAuthDto);
+	async registerByEmail(@Body() registerByEmailDto: RegisterByEmailDto) {
+		return this.authService.registerByEmail(registerByEmailDto);
 	}
 
 	@Post('signin/sms')
-	signinBySms(@Body() createAuthDto: SigninBySmsDto) {
-		return this.authService.create(createAuthDto);
+	async signinBySms(@Body() signinBySmsDto: SigninBySmsDto) {
+		return this.authService.signinBySms(signinBySmsDto);
 	}
 
 	@Post('signin/email')
-	signinByEmail(@Body() createAuthDto: SigninByEmailDto) {
-		return this.authService.create(createAuthDto);
+	async signinByEmail(@Body() signinByEmailDto: SigninByEmailDto) {
+		return this.authService.signinByEmail(signinByEmailDto);
 	}
 
 	@Post('signin/code')
-	verifyCode(@Body() createAuthDto: VerifyCodeDto) {
-		return this.authService.create(createAuthDto);
+	async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
+		return this.authService.signinByCode(verifyCodeDto);
+	}
+
+	@Post('register/code')
+	async registerByCode(@Body() verifyCodeDto: VerifyCodeDto) {
+		return this.authService.registerByCode(verifyCodeDto);
 	}
 }
