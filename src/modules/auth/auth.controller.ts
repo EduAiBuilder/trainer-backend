@@ -13,12 +13,14 @@ export class AuthController {
 
 	@Post('register/sms')
 	async registerBySms(@Body() registerBySmsDto: RegisterBySmsDto) {
-		return this.authService.registerBySms(registerBySmsDto);
+		await this.authService.registerBySms(registerBySmsDto);
+		return { message: 'Verification code sent to your phone', status: 'success' };
 	}
 
 	@Post('register/email')
 	async registerByEmail(@Body() registerByEmailDto: RegisterByEmailDto) {
-		return this.authService.registerByEmail(registerByEmailDto);
+		await this.authService.registerByEmail(registerByEmailDto);
+		return { message: 'Verification code sent to your email', status: 'success' };
 	}
 
 	@Post('signin/sms')
