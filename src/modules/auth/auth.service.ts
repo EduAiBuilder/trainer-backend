@@ -8,10 +8,11 @@ import { User } from '../users/schemas/user.schema';
 import { SigninBySmsDto } from './dto/signin-by-sms.dto';
 import { VerifyCodeDto } from './dto/verify-code.dto';
 import { SigninByEmailDto } from './dto/signin-by-email.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-	constructor(private userService: UsersService, private verifyCodeService: VerifyCodesService) {}
+	constructor(private userService: UsersService, private verifyCodeService: VerifyCodesService, private jwtService: JwtService) {}
 
 	async registerByEmail(registerByEmailDto: RegisterByEmailDto) {
 		await this.validateUserExistence({ email: registerByEmailDto.email, isEmailVerified: true });
@@ -56,13 +57,16 @@ export class AuthService {
 		} else {
 			update = { isPhoneVerified: true };
 		}
-		const user = await this.userService.update(verifyCode.userId, { $set: update });
-		console.log(user);
+		return this.userService.update(verifyCode.userId, { $set: update });
 	}
 
 	async signinByCode(verifyCodeDto: VerifyCodeDto) {
 		const verifyCode = await this.verifyCodeService.checkVerifyCode(verifyCodeDto);
-		const user = await this.userService.findOne({ _id: verifyCode.userId });
-		console.log(user);
+		return this.userService.findOne({ _id: verifyCode.userId });
+	}
+
+	generateToken(user: User) {
+		const payload = { sub: user._id };
+		return this.jwtService.sign(payload);
 	}
 }
