@@ -3,6 +3,7 @@ import { TrainersService } from './trainers.service';
 import { TrainersController } from './trainers.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Trainer, TrainerSchema } from './schemas/trainer.schema';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
 	imports: [
@@ -12,6 +13,7 @@ import { Trainer, TrainerSchema } from './schemas/trainer.schema';
 				schema: TrainerSchema,
 			},
 		]),
+		AuthModule,
 	],
 	controllers: [TrainersController],
 	providers: [TrainersService],
