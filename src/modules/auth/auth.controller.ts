@@ -1,4 +1,5 @@
-import { Controller, Post, Body, UsePipes, ValidationPipe, Response } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, ValidationPipe, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterBySmsDto } from './dto/register-by-sms.dto';
 import { RegisterByEmailDto } from './dto/register-by-email.dto';
@@ -36,26 +37,26 @@ export class AuthController {
 	}
 
 	@Post('signin/code')
-	async verifyCode(@Body() verifyCodeDto: VerifyCodeDto, @Response() res: any) {
+	async verifyCode(@Body() verifyCodeDto: VerifyCodeDto, @Res() res: Response) {
 		const user = await this.authService.signinByCode(verifyCodeDto);
 		const accessToken = this.authService.generateToken(user);
 		res.cookie('accessToken', accessToken, {
-			expires: new Date(new Date().getTime() + 30 * 1000),
-			sameSite: 'strict',
 			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
 		});
-		return res.send(user);
+		res.send(user);
 	}
 
 	@Post('register/code')
-	async registerByCode(@Body() verifyCodeDto: VerifyCodeDto, @Response() res: any) {
+	async registerByCode(@Body() verifyCodeDto: VerifyCodeDto, @Res() res: Response) {
 		const user = await this.authService.registerByCode(verifyCodeDto);
 		const accessToken = this.authService.generateToken(user);
 		res.cookie('accessToken', accessToken, {
-			expires: new Date(new Date().getTime() + 120 * 1000),
-			sameSite: 'strict',
 			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
 		});
-		return res.send(user);
+		res.send(user);
 	}
 }

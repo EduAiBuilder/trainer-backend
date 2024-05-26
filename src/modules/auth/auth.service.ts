@@ -61,7 +61,7 @@ export class AuthService {
 		} else {
 			update = { isPhoneVerified: true };
 		}
-		return this.userService.update(verifyCode.userId, { $set: update });
+		return await this.userService.update(verifyCode.userId, { $set: update });
 	}
 
 	async signinByCode(verifyCodeDto: VerifyCodeDto) {
