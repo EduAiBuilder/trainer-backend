@@ -29,10 +29,12 @@ export class AuthService {
 	}
 
 	async signinBySms(signinBySmsDto: SigninBySmsDto) {
-		const user = await this.userService.findOne({ phone: signinBySmsDto.phone, isPhoneVerified: true });
+		const user = await this.userService.findOne({ phone: signinBySmsDto.phone });
 		if (!user) {
 			throw new Error('User not found');
 		}
+		const verifyCode = await this.verifyCodeService.createVerifyCode(user._id.toString(), user.phone, 'email');
+		// send sms
 	}
 
 	async signinByEmail(signinByEmailDto: SigninByEmailDto) {
@@ -40,6 +42,8 @@ export class AuthService {
 		if (!user) {
 			throw new Error('User not found');
 		}
+		const verifyCode = await this.verifyCodeService.createVerifyCode(user._id.toString(), user.email, 'email');
+		// send email
 	}
 
 	private async validateUserExistence(filter: FilterQuery<User>) {
@@ -52,7 +56,7 @@ export class AuthService {
 	async registerByCode(verifyCodeDto: VerifyCodeDto) {
 		const verifyCode = await this.verifyCodeService.checkVerifyCode(verifyCodeDto);
 		let update;
-		if (verifyCode.identifier === 'email') {
+		if (verifyCode.type === 'email') {
 			update = { isEmailVerified: true };
 		} else {
 			update = { isPhoneVerified: true };

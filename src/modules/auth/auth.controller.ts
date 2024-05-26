@@ -25,12 +25,14 @@ export class AuthController {
 
 	@Post('signin/sms')
 	async signinBySms(@Body() signinBySmsDto: SigninBySmsDto) {
-		return this.authService.signinBySms(signinBySmsDto);
+		await this.authService.signinBySms(signinBySmsDto);
+		return { message: 'Verification code sent to your phone', status: 'success' };
 	}
 
 	@Post('signin/email')
 	async signinByEmail(@Body() signinByEmailDto: SigninByEmailDto) {
-		return this.authService.signinByEmail(signinByEmailDto);
+		await this.authService.signinByEmail(signinByEmailDto);
+		return { message: 'Verification code sent to your email', status: 'success' };
 	}
 
 	@Post('signin/code')

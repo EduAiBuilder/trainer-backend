@@ -16,7 +16,7 @@ export class VerifyCodesService {
 	}
 
 	async checkVerifyCode(verifyCodeDto: VerifyCodeDto) {
-		const verifyCode = await this.verifyCodeModel.findOne({ ...verifyCodeDto, expiredAt: { $gt: new Date() } });
+		const verifyCode = await this.verifyCodeModel.findOne({ ...verifyCodeDto, expiredAt: { $gt: new Date() } }).lean();
 		if (!verifyCode) {
 			throw new Error('Invalid code');
 		}

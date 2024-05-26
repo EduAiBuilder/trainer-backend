@@ -17,6 +17,9 @@ export class VerifyCodes extends Document {
 
 	@Prop({ type: String })
 	identifierType: 'email' | 'phone';
+
+	@Prop({ type: String })
+	type: 'email' | 'phone';
 }
 
 const VerifyCodesSchema = SchemaFactory.createForClass(VerifyCodes);
