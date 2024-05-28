@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { TrainersService } from './trainers.service';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User } from '../../utils/decorators/user.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('trainers')
@@ -10,27 +11,27 @@ export class TrainersController {
 	constructor(private readonly trainersService: TrainersService) {}
 
 	@Post()
-	create(@Body() createTrainerDto: CreateTrainerDto) {
-		return this.trainersService.create(createTrainerDto);
+	async create(@Body() createTrainerDto: CreateTrainerDto, @User('userId') userId: string) {
+		return this.trainersService.create({ ...createTrainerDto, userId });
 	}
 
 	@Get()
-	findAll() {
-		return this.trainersService.findAll();
+	async findAllUsersTrainer(@User('userId') userId: string) {
+		return this.trainersService.findAll({ userId });
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
+	async findOne(@Param('id') id: string) {
 		return this.trainersService.findOne(id);
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto) {
-		return this.trainersService.update(id, updateTrainerDto);
+	async update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto, @User('userId') userId: string) {
+		return this.trainersService.update({ _id: id, userId }, updateTrainerDto);
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.trainersService.remove(id);
+	async remove(@Param('id') id: string, @User('userId') userId: string) {
+		return this.trainersService.remove({ _id: id, userId });
 	}
 }
