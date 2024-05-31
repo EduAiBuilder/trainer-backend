@@ -13,5 +13,5 @@ services:
       - /usr/src/app/node_modules
       - .env:/usr/src/app/.env
     ports:
-      - "3300:3300"
+      - "${PORT:-3300}:${PORT:-3300}"
     command: npm run start:dev
