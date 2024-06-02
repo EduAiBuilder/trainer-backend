@@ -20,8 +20,8 @@ export class TrainersService {
 		return this.trainerModel.find(filter).exec();
 	}
 
-	async findOne(id: string) {
-		return this.trainerModel.findById(id).exec();
+	async findOne(filter: FilterQuery<Trainer>) {
+		return this.trainerModel.findOne(filter).exec();
 	}
 
 	async update(filter: FilterQuery<Trainer>, updateTrainerDto: UpdateTrainerDto) {

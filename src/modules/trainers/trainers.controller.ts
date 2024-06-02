@@ -22,7 +22,7 @@ export class TrainersController {
 
 	@Get(':id')
 	async findOne(@Param('id') id: string) {
-		return this.trainersService.findOne(id);
+		return this.trainersService.findOne({ _id: id });
 	}
 
 	@Patch(':id')

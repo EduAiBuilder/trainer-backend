@@ -17,15 +17,14 @@ export class BingService {
 	}
 
 	async searchImages(categories: string[]) {
-		const categoriesImages = {};
+		const categoriesImages: Record<string, { imageUrl: string; thumbnailUrl: string }[]> = {};
 		for (const category of categories) {
-			const imagesUrls = await this.getImagesFromBingApi(category);
-			categoriesImages[category] = { imagesUrls };
+			categoriesImages[category] = await this.getImagesFromBingApi(category);
 		}
 		return categoriesImages;
 	}
 
-	async getImagesFromBingApi(category: string, count = 150) {
+	async getImagesFromBingApi(category: string, count = 150): Promise<{ imageUrl: string; thumbnailUrl: string }[]> {
 		const imagesEndpoint = '/images/search';
 		const response = await firstValueFrom(
 			this.httpService.get<BingImageResponseInterface>(`${this.bingApiUrl}${imagesEndpoint}`, {

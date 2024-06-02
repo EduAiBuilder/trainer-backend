@@ -12,7 +12,7 @@ export class Trainer extends Document {
 	@Prop({ type: String })
 	description: string;
 
-	@Prop({ type: [String] })
+	@Prop({ type: Array })
 	categories: string[];
 }
 
