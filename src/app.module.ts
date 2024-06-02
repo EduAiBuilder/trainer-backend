@@ -7,16 +7,20 @@ import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
 import { MongodbModule } from './utils/databases/mongo/mongodb.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MysqlModule } from './utils/databases/mysql/mysql.module';
+import { ImagesModule } from './modules/images/images.module';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			load: [appConfig],
 		}),
+		MysqlModule,
 		TrainersModule,
 		UsersModule,
 		MongodbModule,
 		AuthModule,
+		ImagesModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
