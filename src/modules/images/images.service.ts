@@ -45,8 +45,24 @@ export class ImagesService {
 		return this.trainersCategoriesImagesService.create(trainersCategoriesImages);
 	}
 
-	async findAll() {
-		return this.imageRepository.find();
+	async findImages(trainerId: string, categories: string[], userId: string, page: number, pageNumbers = 10) {
+		const query = this.imageRepository
+			.createQueryBuilder('image')
+			.select('image')
+			.innerJoin('image.trainersCategoriesImages', 'trainerCategories')
+			.where('trainerCategories.trainer_id = :trainerId', { trainerId })
+			.andWhere('trainerCategories.user_id = :userId', { userId })
+			.limit(pageNumbers);
+
+		if (categories?.length) {
+			query.andWhere('trainerCategories.category IN (:...categories)', { categories });
+		}
+
+		if (page) {
+			query.offset(page * pageNumbers);
+		}
+
+		return query.getMany();
 	}
 
 	remove(id: number) {

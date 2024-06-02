@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ImageEntity } from '../../entities/image.entity';
 
 @Entity('trainers_categories_images')
@@ -27,7 +27,7 @@ export class TrainersCategoriesImagesEntity {
 	@Column({ type: 'varchar', length: 255 })
 	category: string;
 
-	@ManyToMany(() => ImageEntity, (image) => image.trainersCategoriesImages)
+	@OneToOne(() => ImageEntity, (image) => image.trainersCategoriesImages)
 	@JoinColumn({ name: 'image_id', referencedColumnName: 'id' })
 	image: ImageEntity[];
 }

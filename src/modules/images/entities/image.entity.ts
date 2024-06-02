@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ImageSourceEnum } from '../enums/image-source.enum';
 import { TrainersCategoriesImagesEntity } from '../trainers-categories-images/entities/trainers-categories-images.entity';
 
@@ -28,7 +28,7 @@ export class ImageEntity {
 	@Column({ type: 'varchar', length: 255 })
 	init_category: string;
 
-	@ManyToMany(() => TrainersCategoriesImagesEntity, (trainersCategoriesImages) => trainersCategoriesImages.image)
-	@JoinColumn({ name: 'image_id', referencedColumnName: 'id' })
+	@OneToOne(() => TrainersCategoriesImagesEntity, (trainersCategoriesImages) => trainersCategoriesImages.image)
+	@JoinColumn({ name: 'id', referencedColumnName: 'image_id' })
 	trainersCategoriesImages: TrainersCategoriesImagesEntity[];
 }
