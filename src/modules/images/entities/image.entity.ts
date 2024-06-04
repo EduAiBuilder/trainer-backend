@@ -29,6 +29,5 @@ export class ImageEntity {
 	initCategory: string;
 
 	@OneToOne(() => TrainersCategoriesImagesEntity, (trainersCategoriesImages) => trainersCategoriesImages.image)
-	@JoinColumn({ name: 'id', referencedColumnName: 'image_id' })
 	trainersCategoriesImages: TrainersCategoriesImagesEntity[];
 }
