@@ -21,7 +21,7 @@ export class TrainersCategoriesImagesEntity {
 	@Column({ type: 'varchar', length: 256, name: 'trainer_id' })
 	trainerId: string;
 
-	@Column({ type: 'varchar', length: 256 })
+	@Column({ type: 'varchar', length: 256, name: 'user_id' })
 	userId: string;
 
 	@Column({ type: 'varchar', length: 255 })
