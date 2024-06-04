@@ -52,6 +52,7 @@ export class ImagesService {
 			.innerJoin('image.trainersCategoriesImages', 'trainerCategories')
 			.where('trainerCategories.trainer_id = :trainerId', { trainerId })
 			.andWhere('trainerCategories.user_id = :userId', { userId })
+			.orderBy('RAND()')
 			.limit(pageNumbers);
 
 		if (categories?.length) {
