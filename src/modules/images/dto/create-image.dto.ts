@@ -3,14 +3,14 @@ import { ImageSourceEnum } from '../enums/image-source.enum';
 
 export class CreateImageDto {
 	@IsString()
-	image_url: string;
+	imageUrl: string;
 
 	@IsString()
-	thumbnail_url: string;
+	thumbnailUrl: string;
 
 	@IsEnum(ImageSourceEnum)
 	source: ImageSourceEnum;
 
 	@IsString()
-	init_category: string;
+	initCategory: string;
 }

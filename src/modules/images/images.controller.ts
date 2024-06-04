@@ -22,7 +22,7 @@ export class ImagesController {
 
 	@Post()
 	create(@Body() createImageDto: CreateImageDto, @User('userId') userId: string) {
-		return this.imagesService.create({ ...createImageDto, created_by: userId });
+		return this.imagesService.create({ ...createImageDto, createdBy: userId });
 	}
 
 	@Get()

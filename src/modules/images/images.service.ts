@@ -26,21 +26,21 @@ export class ImagesService {
 		const categoriesImagesHm = await this.bingService.searchImages(categories);
 		const images = Object.entries(categoriesImagesHm).map(([category, imagesUrl]) => {
 			return imagesUrl.map((image) => ({
-				init_category: category,
-				image_url: image.imageUrl,
-				thumbnail_url: image.thumbnailUrl,
+				initCategory: category,
+				imageUrl: image.imageUrl,
+				thumbnailUrl: image.thumbnailUrl,
 				source: ImageSourceEnum.BING,
-				created_by: userId,
+				createdBy: userId,
 			}));
 		});
 		const imagesToSave = images.flat();
 		const newImages = await this.imageRepository.save(imagesToSave);
 		const trainersCategoriesImages = newImages.map((image) => ({
-			image_id: image.id,
-			trainer_id: trainerId,
-			category: image.init_category,
-			user_id: userId,
-			created_by: userId,
+			imageId: image.id,
+			trainerId: trainerId,
+			category: image.initCategory,
+			userId: userId,
+			createdBy: userId,
 		}));
 		return this.trainersCategoriesImagesService.create(trainersCategoriesImages);
 	}
