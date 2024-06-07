@@ -29,5 +29,14 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
+  elasticmq:
+    image: softwaremill/elasticmq
+    container_name: elasticmq
+    ports:
+      - "9324:9324"
+      - "9325:9325"
+    environment:
+      - ELASTICMQ_REST_PORT=9324
+
 volumes:
   mysql-data:
