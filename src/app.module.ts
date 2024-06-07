@@ -9,6 +9,7 @@ import { MongodbModule } from './utils/databases/mongo/mongodb.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MysqlModule } from './utils/databases/mysql/mysql.module';
 import { ImagesModule } from './modules/images/images.module';
+import { SqsModule } from './modules/sqs/sqs.module';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { ImagesModule } from './modules/images/images.module';
 		MongodbModule,
 		AuthModule,
 		ImagesModule,
+		SqsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
