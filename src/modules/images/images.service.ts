@@ -45,15 +45,18 @@ export class ImagesService {
 		return this.trainersCategoriesImagesService.create(trainersCategoriesImages);
 	}
 
-	async findImages(trainerId: string, categories: string[], userId: string, page: number, pageNumbers = 10) {
+	async findImages(trainerId: string, categories: string[], userId: string, page: number, pageNumbers = 10, isRandomRequired = false) {
 		const query = this.imageRepository
 			.createQueryBuilder('image')
 			.select('image')
 			.innerJoin('image.trainersCategoriesImages', 'trainerCategories')
 			.where('trainerCategories.trainer_id = :trainerId', { trainerId })
 			.andWhere('trainerCategories.user_id = :userId', { userId })
-			.orderBy('RAND()')
 			.limit(pageNumbers);
+
+		if (isRandomRequired) {
+			query.orderBy('RAND()');
+		}
 
 		if (categories?.length) {
 			query.andWhere('trainerCategories.category IN (:...categories)', { categories });

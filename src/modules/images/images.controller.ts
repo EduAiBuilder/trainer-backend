@@ -31,9 +31,10 @@ export class ImagesController {
 		@User('userId') userId: string,
 		@Query('categories', new ParseArrayPipe({ optional: true })) categories: string[],
 		@Query('page', new ParseIntPipe({ optional: true })) page: number,
-		@Query('pageNumbers', new ParseIntPipe({ optional: true })) pageNumbers: number
+		@Query('pageNumbers', new ParseIntPipe({ optional: true })) pageNumbers: number,
+		@Query('isRandomRequired') isRandomRequired: boolean
 	) {
-		return this.imagesService.findImages(trainerId, categories, userId, page, pageNumbers);
+		return this.imagesService.findImages(trainerId, categories, userId, page, pageNumbers, isRandomRequired);
 	}
 
 	@Delete(':id')
