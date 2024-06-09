@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImageEntity } from './entities/image.entity';
 import { TrainersModule } from '../trainers/trainers.module';
 import { TrainersCategoriesImagesModule } from './trainers-categories-images/trainers-categories-images.module';
+import { ImagesSqsConsumer } from './images.sqs-consumer';
+import { SqsConfigModule } from '../../utils/sqs/sqsConfigModule';
 
 @Module({
-	imports: [BingModule, TrainersModule, TypeOrmModule.forFeature([ImageEntity]), TrainersCategoriesImagesModule],
+	imports: [BingModule, TrainersModule, TypeOrmModule.forFeature([ImageEntity]), TrainersCategoriesImagesModule, SqsConfigModule],
 	controllers: [ImagesController],
-	providers: [ImagesService],
+	providers: [ImagesService, ImagesSqsConsumer],
 })
 export class ImagesModule {}

@@ -4,6 +4,7 @@ import { TrainersController } from './trainers.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Trainer, TrainerSchema } from './schemas/trainer.schema';
 import { AuthModule } from '../auth/auth.module';
+import { SqsConfigModule } from '../../utils/sqs/sqsConfigModule';
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from '../auth/auth.module';
 			},
 		]),
 		AuthModule,
+		SqsConfigModule,
 	],
 	controllers: [TrainersController],
 	providers: [TrainersService],
