@@ -1,22 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TrainersService } from './trainers.service';
 import { TrainersController } from './trainers.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Trainer, TrainerSchema } from './schemas/trainer.schema';
 import { AuthModule } from '../auth/auth.module';
 import { SqsConfigModule } from '../../utils/sqs/sqsConfigModule';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TrainerEntity } from './entities/trainer.entity';
 
 @Module({
-	imports: [
-		MongooseModule.forFeature([
-			{
-				name: Trainer.name,
-				schema: TrainerSchema,
-			},
-		]),
-		AuthModule,
-		SqsConfigModule,
-	],
+	imports: [TypeOrmModule.forFeature([TrainerEntity]), AuthModule, SqsConfigModule],
 	controllers: [TrainersController],
 	providers: [TrainersService],
 	exports: [TrainersService],

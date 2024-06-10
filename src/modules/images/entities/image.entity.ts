@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ImageSourceEnum } from '../enums/image-source.enum';
-import { TrainersCategoriesImagesEntity } from '../trainers-categories-images/entities/trainers-categories-images.entity';
+import { SearchTermsImages } from '../../search-terms-images/entities/search-terms-images.entity';
 
 @Entity('images')
 export class ImageEntity {
@@ -28,6 +28,6 @@ export class ImageEntity {
 	@Column({ type: 'varchar', length: 255, name: 'init_category' })
 	initCategory: string;
 
-	@OneToOne(() => TrainersCategoriesImagesEntity, (trainersCategoriesImages) => trainersCategoriesImages.image)
-	trainersCategoriesImages: TrainersCategoriesImagesEntity[];
+	@OneToMany(() => SearchTermsImages, (searchTermsImages) => searchTermsImages.image)
+	searchTermsImages: SearchTermsImages[];
 }
