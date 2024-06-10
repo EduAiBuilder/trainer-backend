@@ -15,14 +15,6 @@ export class ImagesService {
 	) {}
 
 	async searchImages(trainerId: string, categories: string[], userId: string) {
-		// const alreadySearchedImages = await this.imageRepository
-		// 	.createQueryBuilder('image')
-		// 	.select('image')
-		// 	.innerJoin('image.trainersCategoriesImages', 'trainerCategories')
-		// 	.where('trainerCategories.trainerId = :trainerId', { trainerId })
-		// 	.where({ 'trainerCategories.category': In(categories) })
-		// 	.where('image.source = :source', { source: ImageSourceEnum.BING })
-		// 	.getMany();
 		const categoriesImagesHm = await this.bingService.searchImages(categories);
 		const images = Object.entries(categoriesImagesHm).map(([category, imagesUrl]) => {
 			return imagesUrl.map((image) => ({
