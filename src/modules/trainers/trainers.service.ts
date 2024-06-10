@@ -19,7 +19,7 @@ export class TrainersService {
 	async create(createTrainerDto: TrainerInterface) {
 		const trainer = await this.trainerModel.create(createTrainerDto);
 		await this.sqsService.send(SqsQueuesNamesEnum.SEARCH_IMAGES, {
-			body: trainer._id,
+			body: { trainerId: trainer._id, userId: createTrainerDto.userId },
 			id: trainer._id.toString(),
 			groupId: MessageGroupsIdsEnum.IMAGES,
 		});
