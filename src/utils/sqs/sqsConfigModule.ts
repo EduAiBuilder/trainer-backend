@@ -11,22 +11,13 @@ import { sqsConfig } from '../configs/sqs.config';
 		SqsModule.registerAsync({
 			imports: [ConfigModule],
 
-			useFactory: (configService: ConfigService) => ({
-				consumers: [
-					{
-						name: configService.get('sqs.name'),
-						queueUrl: configService.get('sqs.url'),
-						region: configService.get('sqs.region'),
-					},
-				],
-				producers: [
-					{
-						name: configService.get('sqs.name'),
-						queueUrl: configService.get('sqs.url'),
-						region: configService.get('sqs.region'),
-					},
-				],
-			}),
+			useFactory: (configService: ConfigService) => {
+				const searchImagesQueueConfig = configService.get('sqs.searchImages');
+				return {
+					consumers: [searchImagesQueueConfig],
+					producers: [searchImagesQueueConfig],
+				};
+			},
 			inject: [ConfigService],
 		}),
 	],

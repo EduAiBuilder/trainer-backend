@@ -1,7 +1,14 @@
 import { registerAs } from '@nestjs/config';
 
 export const sqsConfig = registerAs('sqs', () => ({
-	name: process.env.SQS_NAME,
-	url: process.env.SQS_URL,
-	region: process.env.SQS_REGION,
+	searchImages: {
+		name: process.env.SQS_IMAGES_NAME,
+		queueUrl: process.env.SQS_IMAGES_URL,
+		region: process.env.SQS_IMAGES_REGION,
+	},
+	trainModel: {
+		name: process.env.SQS_TRAIN_NAME,
+		queueUrl: process.env.SQS_TRAIN_URL,
+		region: process.env.SQS_TRAIN_REGION,
+	},
 }));
