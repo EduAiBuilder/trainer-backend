@@ -16,11 +16,11 @@ export class ImagesSqsConsumer {
 			const messageData = JSON.parse(message.Body);
 			trainerId = messageData.trainerId;
 			userId = messageData.userId;
-			const trainer = await this.trainersService.findOne({ _id: trainerId, userId });
+			const trainer = await this.trainersService.findOne({ id: trainerId, userId });
 			if (!trainer) {
 				throw new HttpException(`Trainer ${trainerId} not found for user ${userId}`, HttpStatus.NOT_FOUND);
 			}
-			return this.imagesService.searchImages(trainerId, trainer.categories, userId);
+			// return this.imagesService.searchImages(trainerId, trainer.categories, userId);
 		} catch (e) {
 			console.log(`can't search images for trainerId ${trainerId} and userId ${userId}`);
 		}

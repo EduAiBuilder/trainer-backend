@@ -4,15 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ImageEntity } from './entities/image.entity';
 import { Repository } from 'typeorm';
 import { ImageSourceEnum } from './enums/image-source.enum';
-import { TrainersCategoriesImagesService } from './trainers-categories-images/trainers-categories-images.service';
 
 @Injectable()
 export class ImagesService {
-	constructor(
-		private bingService: BingService,
-		@InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>,
-		private trainersCategoriesImagesService: TrainersCategoriesImagesService
-	) {}
+	constructor(private bingService: BingService, @InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>) {}
 
 	async searchImages(trainerId: string, categories: string[], userId: string) {
 		const categoriesImagesHm = await this.bingService.searchImages(categories);
@@ -27,17 +22,16 @@ export class ImagesService {
 		});
 		const imagesToSave = images.flat();
 		const newImages = await this.imageRepository.save(imagesToSave);
-		const trainersCategoriesImages = newImages.map((image) => ({
-			imageId: image.id,
-			trainerId: trainerId,
-			category: image.initCategory,
-			userId: userId,
-			createdBy: userId,
-		}));
-		return this.trainersCategoriesImagesService.create(trainersCategoriesImages);
+		// const trainersCategoriesImages = newImages.map((image) => ({
+		// 	imageId: image.id,
+		// 	trainerId: trainerId,
+		// 	category: image.initCategory,
+		// 	userId: userId,
+		// 	createdBy: userId,
+		// }));
 	}
 
-	async findImages(trainerId: string, categories: string[], userId: string, page: number, pageNumbers = 10, isRandomRequired = false) {
+	async findImages(trainerId: string, categories: string[], userId: number, page: number, pageNumbers = 10, isRandomRequired = false) {
 		const query = this.imageRepository
 			.createQueryBuilder('image')
 			.select('image')

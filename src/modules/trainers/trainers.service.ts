@@ -28,7 +28,7 @@ export class TrainersService {
 	}
 
 	async findOne(filter: FindOptionsWhere<TrainerEntity>) {
-		return this.trainerRepository.findOne({ where: filter });
+		return this.trainerRepository.findOne({ where: filter, relations: ['categories'], loadEagerRelations: true });
 	}
 
 	async update(where: FindOptionsWhere<TrainerEntity>, updateTrainerDto: Partial<TrainerEntity>) {

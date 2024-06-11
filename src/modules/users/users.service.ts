@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 @Injectable()
 export class UsersService {
@@ -16,13 +17,13 @@ export class UsersService {
 		return await this.userRepository.save(newUser);
 	}
 
-	async findOne(id: number): Promise<UserEntity | undefined> {
-		return await this.userRepository.findOne({ where: { id } });
+	async findOne(where: FindOptionsWhere<UserEntity>): Promise<UserEntity | undefined> {
+		return await this.userRepository.findOne({ where });
 	}
 
 	async update(id: number, updateUser: Partial<UserEntity>): Promise<UserEntity> {
 		await this.userRepository.update(id, updateUser);
-		return this.findOne(id);
+		return this.findOne({ id });
 	}
 
 	async remove(id: number): Promise<void> {

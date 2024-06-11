@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { appConfig } from './utils/configs/app.config';
 import { TrainersModule } from './modules/trainers/trainers.module';
 import { UsersModule } from './modules/users/users.module';
-import { MongodbModule } from './utils/databases/mongo/mongodb.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MysqlModule } from './utils/databases/mysql/mysql.module';
 import { ImagesModule } from './modules/images/images.module';
@@ -18,7 +17,6 @@ import { ImagesModule } from './modules/images/images.module';
 		MysqlModule,
 		TrainersModule,
 		UsersModule,
-		MongodbModule,
 		AuthModule,
 		ImagesModule,
 	],
