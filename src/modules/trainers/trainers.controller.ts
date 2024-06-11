@@ -11,27 +11,28 @@ export class TrainersController {
 	constructor(private readonly trainersService: TrainersService) {}
 
 	@Post()
-	async create(@Body() createTrainerDto: CreateTrainerDto, @User('userId') userId: string) {
+	async create(@Body() createTrainerDto: CreateTrainerDto, @User('userId') userId: number) {
 		return this.trainersService.create({ ...createTrainerDto, userId });
 	}
 
 	@Get()
-	async findAllUsersTrainer(@User('userId') userId: string) {
+	async findAllUsersTrainer(@User('userId') userId: number) {
 		return this.trainersService.findAll({ userId });
 	}
 
 	@Get(':id')
-	async findOne(@Param('id') id: string) {
-		return this.trainersService.findOne({ _id: id });
+	async findOne(@Param('id') id: number) {
+		return this.trainersService.findOne({ id });
 	}
 
 	@Patch(':id')
-	async update(@Param('id') id: string, @Body() updateTrainerDto: UpdateTrainerDto, @User('userId') userId: string) {
-		return this.trainersService.update({ _id: id, userId }, updateTrainerDto);
+	async update(@Param('id') id: number, @Body() updateTrainerDto: UpdateTrainerDto, @User('userId') userId: number) {
+		const { categories, ...rest } = updateTrainerDto;
+		return this.trainersService.update({ id, userId }, rest);
 	}
 
 	@Delete(':id')
-	async remove(@Param('id') id: string, @User('userId') userId: string) {
-		return this.trainersService.remove({ _id: id, userId });
+	async remove(@Param('id') id: number, @User('userId') userId: number) {
+		return this.trainersService.remove({ id, userId });
 	}
 }
