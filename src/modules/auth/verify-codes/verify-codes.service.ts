@@ -1,22 +1,26 @@
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { VerifyCodes } from './schemas/verify-codes.schema';
 import { VerifyCodeDto } from '../dto/verify-code.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { VerifyCodes } from './entities/verify-codes.entity';
+import { MoreThan, Repository } from 'typeorm';
 
 export class VerifyCodesService {
-	constructor(
-		@InjectModel(VerifyCodes.name)
-		private verifyCodeModel: Model<VerifyCodes>
-	) {}
+	constructor(@InjectRepository(VerifyCodes) private readonly verifyCodesRepository: Repository<VerifyCodes>) {}
 
-	async createVerifyCode(userId: string, identifier: string, type: string) {
+	async createVerifyCode(userId: number, identifier: string, identifierType: 'email' | 'phone') {
 		const expiredAt = this.setFiveMinutesFromNow();
 		const code = this.setUniqueCode();
-		await this.verifyCodeModel.create({ identifier, userId, expiredAt, code, type });
+		const verifyCode: Partial<VerifyCodes> = { identifier, userId, expiredAt, code, identifierType };
+		const newVerifyCode = this.verifyCodesRepository.create(verifyCode);
+		await this.verifyCodesRepository.save(newVerifyCode);
 	}
 
 	async checkVerifyCode(verifyCodeDto: VerifyCodeDto) {
-		const verifyCode = await this.verifyCodeModel.findOne({ ...verifyCodeDto, expiredAt: { $gt: new Date() } }).lean();
+		const verifyCode = await this.verifyCodesRepository.findOne({
+			where: {
+				...verifyCodeDto,
+				expiredAt: MoreThan(new Date()),
+			},
+		});
 		if (!verifyCode) {
 			throw new Error('Invalid code');
 		}

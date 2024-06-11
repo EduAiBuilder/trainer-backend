@@ -1,17 +1,10 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { VerifyCodesService } from './verify-codes.service';
-import { VerifyCodes, VerifyCodesSchema } from './schemas/verify-codes.schema';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { VerifyCodes } from './entities/verify-codes.entity';
 
 @Module({
-	imports: [
-		MongooseModule.forFeature([
-			{
-				name: VerifyCodes.name,
-				schema: VerifyCodesSchema,
-			},
-		]),
-	],
+	imports: [TypeOrmModule.forFeature([VerifyCodes])],
 	providers: [VerifyCodesService],
 	exports: [VerifyCodesService],
 })
