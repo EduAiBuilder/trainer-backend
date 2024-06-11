@@ -1,33 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
 	constructor(
-		@InjectModel(User.name)
-		private userModel: Model<User>
+		@InjectRepository(UserEntity)
+		private readonly userRepository: Repository<UserEntity>
 	) {}
 
-	async create(createUserDto: CreateUserDto) {
-		return this.userModel.create(createUserDto);
+	async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+		const newUser = this.userRepository.create(createUserDto);
+		return await this.userRepository.save(newUser);
 	}
 
-	async findAll() {
-		return `This action returns all users`;
+	async findOne(id: number): Promise<UserEntity | undefined> {
+		return await this.userRepository.findOne({ where: { id } });
 	}
 
-	async findOne(filter: FilterQuery<User>) {
-		return this.userModel.findOne(filter).exec();
+	async update(id: number, updateUser: Partial<UserEntity>): Promise<UserEntity> {
+		await this.userRepository.update(id, updateUser);
+		return this.findOne(id);
 	}
 
-	async update(id: string, updateUser: Partial<User>) {
-		return this.userModel.findByIdAndUpdate(id, updateUser);
-	}
-
-	async remove(id: string) {
-		return `This action removes a #${id} user`;
+	async remove(id: number): Promise<void> {
+		await this.userRepository.delete(id);
 	}
 }

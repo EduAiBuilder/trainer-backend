@@ -4,7 +4,7 @@ export const User = createParamDecorator((data: string, ctx: ExecutionContext) =
 	const request = ctx.switchToHttp().getRequest();
 	const user: { userId: string } = request.user;
 	if (data) {
-		if (typeof user[data] !== 'string') {
+		if (typeof user[data] !== 'number') {
 			return null;
 		}
 		return user[data];
