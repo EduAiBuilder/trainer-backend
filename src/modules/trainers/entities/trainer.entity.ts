@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { Category } from '../../categories/entities/category.entity';
 
@@ -10,11 +10,17 @@ export class TrainerEntity {
 	@Column({ type: 'varchar', length: 255 })
 	name: string;
 
-	@Column({ type: 'varchar', length: 2048 })
+	@Column({ type: 'varchar', length: 2048, default: null })
 	description: string;
 
 	@Column({ type: 'int', width: 11, name: 'user_id' })
 	userId: number;
+
+	@CreateDateColumn({ name: 'created_at' })
+	createdAt: Date;
+
+	@UpdateDateColumn({ name: 'updated_at' })
+	updatedAt: Date;
 
 	@ManyToOne(() => UserEntity, (user) => user.trainers) // Assuming User entity has a trainers property
 	@JoinColumn({ name: 'user_id' })

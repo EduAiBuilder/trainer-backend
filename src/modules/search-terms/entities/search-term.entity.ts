@@ -7,8 +7,8 @@ export class SearchTerm {
 	@PrimaryGeneratedColumn({ type: 'int' })
 	id: number;
 
-	@Column({ type: 'int', width: 11 })
-	category_id: number;
+	@Column({ type: 'varchar', length: 255 })
+	name: string;
 
 	@OneToMany(() => SearchTermsImages, (searchTermsImages) => searchTermsImages.searchTerm)
 	searchTermsImages: SearchTermsImages[];

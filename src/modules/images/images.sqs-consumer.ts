@@ -20,6 +20,8 @@ export class ImagesSqsConsumer {
 			if (!trainer) {
 				throw new HttpException(`Trainer ${trainerId} not found for user ${userId}`, HttpStatus.NOT_FOUND);
 			}
+			const searchTerms = trainer.categories.flatMap((category) => category.categoriesSearchTerms.map((term) => term.searchTerm.name));
+			console.log(`searching images for trainerId ${trainerId} and userId ${userId} with search terms:`, searchTerms);
 			// return this.imagesService.searchImages(trainerId, trainer.categories, userId);
 		} catch (e) {
 			console.log(`can't search images for trainerId ${trainerId} and userId ${userId}`);

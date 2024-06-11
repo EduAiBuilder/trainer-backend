@@ -1,5 +1,7 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateCategoryDto } from '../../categories/dtos/create-category.dto';
+import { Type } from 'class-transformer';
 
 export class CreateTrainerDto {
 	@ApiProperty()
@@ -12,6 +14,8 @@ export class CreateTrainerDto {
 	description: string;
 
 	@ApiProperty()
-	@IsString({ each: true })
-	categories: string[];
+	@ValidateNested({ each: true })
+	@Type(() => CreateCategoryDto)
+	@IsArray()
+	categories: CreateCategoryDto[];
 }

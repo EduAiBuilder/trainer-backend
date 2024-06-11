@@ -7,11 +7,11 @@ export class CategoriesSearchTerms {
 	@PrimaryGeneratedColumn({ type: 'int' })
 	id: number;
 
-	@Column({ type: 'int', width: 11 })
-	category_id: number;
+	@Column({ type: 'int', width: 11, name: 'category_id' })
+	categoryId: number;
 
-	@Column({ type: 'int', width: 11 })
-	search_term_id: number;
+	@Column({ type: 'int', width: 11, name: 'search_term_id' })
+	searchTermId: number;
 
 	@ManyToOne(() => Category, (category) => category.categoriesSearchTerms)
 	@JoinColumn({ name: 'category_id' })

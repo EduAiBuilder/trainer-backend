@@ -7,8 +7,14 @@ export class Category {
 	@PrimaryGeneratedColumn({ type: 'int' })
 	id: number;
 
-	@Column({ type: 'int', width: 11 })
-	trainer_id: number;
+	@Column({ type: 'int', width: 11, name: 'trainer_id' })
+	trainerId: number;
+
+	@Column({ type: 'varchar', length: 255 })
+	name: string;
+
+	@Column({ type: 'varchar', length: 1024, default: null })
+	description: string;
 
 	@ManyToOne(() => TrainerEntity, (trainer) => trainer.categories)
 	@JoinColumn({ name: 'trainer_id' })

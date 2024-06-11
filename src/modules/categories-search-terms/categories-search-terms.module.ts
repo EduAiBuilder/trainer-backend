@@ -6,5 +6,6 @@ import { CategoriesSearchTerms } from './entities/categories-search-terms.entity
 @Module({
 	imports: [TypeOrmModule.forFeature([CategoriesSearchTerms])],
 	providers: [CategoriesSearchTermsService],
+	exports: [CategoriesSearchTermsService],
 })
 export class CategoriesSearchTermsModule {}
