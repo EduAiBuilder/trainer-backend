@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, CreateDateColumn, Update
 @Entity({ name: 'verify_codes' })
 @Index(['code', 'identifier'])
 export class VerifyCodes {
-	@PrimaryGeneratedColumn('uuid')
+	@PrimaryGeneratedColumn('increment')
 	id: number;
 
 	@Column({ type: 'varchar', length: 255, name: 'user_id' })
