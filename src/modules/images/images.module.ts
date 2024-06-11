@@ -7,10 +7,11 @@ import { ImageEntity } from './entities/image.entity';
 import { TrainersModule } from '../trainers/trainers.module';
 import { ImagesSqsConsumer } from './images.sqs-consumer';
 import { SqsConfigModule } from '../../utils/sqs/sqsConfigModule';
+import { SearchTermsImagesModule } from '../search-terms-images/search-terms-images.module';
 
 @Module({
-	imports: [BingModule, TrainersModule, TypeOrmModule.forFeature([ImageEntity]), SqsConfigModule],
+	imports: [BingModule, TrainersModule, TypeOrmModule.forFeature([ImageEntity]), SqsConfigModule, SearchTermsImagesModule],
 	controllers: [ImagesController],
-	providers: [ImagesService, ImagesSqsConsumer],
+	providers: [ImagesService, ImagesSqsConsumer], //
 })
 export class ImagesModule {}

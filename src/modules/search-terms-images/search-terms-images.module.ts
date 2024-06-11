@@ -6,5 +6,6 @@ import { SearchTermsImages } from './entities/search-terms-images.entity';
 @Module({
 	imports: [TypeOrmModule.forFeature([SearchTermsImages])],
 	providers: [SearchTermsImagesService],
+	exports: [SearchTermsImagesService],
 })
 export class SearchTermsImagesModule {}

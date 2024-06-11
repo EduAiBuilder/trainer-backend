@@ -3,6 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { BingImageResponseInterface } from './interfaces/bing-images-response.interface';
+import { SearchTerm } from '../../search-terms/entities/search-term.entity';
+import { ProviderImageResponseInterface } from './interfaces/provider-image-response.interface';
 
 @Injectable()
 export class BingService {
@@ -16,28 +18,26 @@ export class BingService {
 		};
 	}
 
-	async searchImages(categories: string[]) {
-		const categoriesImages: Record<string, { imageUrl: string; thumbnailUrl: string }[]> = {};
-		for (const category of categories) {
-			categoriesImages[category] = await this.getImagesFromBingApi(category);
+	async searchImages(searchTerms: SearchTerm[]): Promise<
+		{
+			images: ProviderImageResponseInterface[];
+			searchTermId: number;
+		}[]
+	> {
+		const searchTermImages: { images: ProviderImageResponseInterface[]; searchTermId: number }[] = [];
+		for (const searchTerm of searchTerms) {
+			const searchTermImage = { images: await this.getImagesFromBingApi(searchTerm.name), searchTermId: searchTerm.id };
+			searchTermImages.push(searchTermImage);
 		}
-		return categoriesImages;
+		return searchTermImages;
 	}
 
-	async getImagesFromBingApi(category: string, count = 150): Promise<{ imageUrl: string; thumbnailUrl: string }[]> {
-		const imagesEndpoint = '/images/search';
-		const response = await firstValueFrom(
-			this.httpService.get<BingImageResponseInterface>(`${this.bingApiUrl}${imagesEndpoint}`, {
-				headers: this.headers,
-				params: {
-					q: category,
-					count,
-					min_height: 128,
-					min_width: 128,
-				},
-			})
-		);
-		const images = response.data.value;
+	async getImagesFromBingApi(searchTerm: string, count = 150): Promise<ProviderImageResponseInterface[]> {
+		const response = await this.getBingImagesApiCall(searchTerm, count);
+		const images = response?.data?.value;
+		if (!images?.length) {
+			return [];
+		}
 		const imagesUrls = images.map((imageObj) => {
 			if (!imageObj?.contentUrl) {
 				return;
@@ -45,8 +45,25 @@ export class BingService {
 			return {
 				imageUrl: imageObj.contentUrl,
 				thumbnailUrl: imageObj.thumbnailUrl,
+				imageProviderName: imageObj.name,
 			};
 		});
 		return imagesUrls.filter((image) => image);
+	}
+
+	private async getBingImagesApiCall(searchTerm: string, count: number) {
+		const imagesEndpoint = '/images/search';
+
+		return firstValueFrom(
+			this.httpService.get<BingImageResponseInterface>(`${this.bingApiUrl}${imagesEndpoint}`, {
+				headers: this.headers,
+				params: {
+					q: searchTerm,
+					count,
+					min_height: 128,
+					min_width: 128,
+				},
+			})
+		);
 	}
 }

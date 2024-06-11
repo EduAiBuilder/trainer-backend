@@ -25,8 +25,8 @@ export class ImageEntity {
 	@Column({ type: 'enum', enum: ImageSourceEnum, default: ImageSourceEnum.UPLOAD })
 	source: ImageSourceEnum;
 
-	@Column({ type: 'varchar', length: 255, name: 'init_category' })
-	initCategory: string;
+	@Column({ type: 'int', width: 11, name: 'init_search_term_id' })
+	initSearchTermId: number;
 
 	@OneToMany(() => SearchTermsImages, (searchTermsImages) => searchTermsImages.image)
 	searchTermsImages: SearchTermsImages[];

@@ -1,34 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { BingService } from '../providers/bing/bing.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ImageEntity } from './entities/image.entity';
 import { Repository } from 'typeorm';
 import { ImageSourceEnum } from './enums/image-source.enum';
+import { TrainerEntity } from '../trainers/entities/trainer.entity';
+import { SearchTermsImagesService } from '../search-terms-images/search-terms-images.service';
 
 @Injectable()
 export class ImagesService {
-	constructor(private bingService: BingService, @InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>) {}
+	constructor(
+		private bingService: BingService,
+		@InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>,
+		private searchTermsImagesService: SearchTermsImagesService
+	) {}
 
-	async searchImages(trainerId: string, categories: string[], userId: string) {
-		const categoriesImagesHm = await this.bingService.searchImages(categories);
-		const images = Object.entries(categoriesImagesHm).map(([category, imagesUrl]) => {
-			return imagesUrl.map((image) => ({
-				initCategory: category,
-				imageUrl: image.imageUrl,
-				thumbnailUrl: image.thumbnailUrl,
-				source: ImageSourceEnum.BING,
-				createdBy: userId,
-			}));
+	async searchImages(trainer: TrainerEntity, userId: string) {
+		const searchTerms = trainer.categories?.flatMap((category) => category?.categoriesSearchTerms?.map((term) => term?.searchTerm));
+		if (!searchTerms?.length) {
+			throw new HttpException(`No search terms found for trainer ${trainer.id} and user ${userId}`, HttpStatus.NOT_FOUND);
+		}
+		const searchTermImages = await this.bingService.searchImages(searchTerms);
+		const images = searchTermImages.map(({ searchTermId, images }) => {
+			return images.map((image) => {
+				const newImage: Partial<ImageEntity> = {
+					initSearchTermId: searchTermId,
+					imageUrl: image.imageUrl,
+					thumbnailUrl: image.thumbnailUrl,
+					source: ImageSourceEnum.BING,
+					createdBy: userId,
+				};
+				return this.imageRepository.create(newImage);
+			});
 		});
 		const imagesToSave = images.flat();
+
 		const newImages = await this.imageRepository.save(imagesToSave);
-		// const trainersCategoriesImages = newImages.map((image) => ({
-		// 	imageId: image.id,
-		// 	trainerId: trainerId,
-		// 	category: image.initCategory,
-		// 	userId: userId,
-		// 	createdBy: userId,
-		// }));
+		const searchTermsImages = newImages.map((image) => {
+			return {
+				imageId: image.id,
+				searchTermId: image.initSearchTermId,
+			};
+		});
+		return this.searchTermsImagesService.createBatch(searchTermsImages);
 	}
 
 	async findImages(trainerId: string, categories: string[], userId: number, page: number, pageNumbers = 10, isRandomRequired = false) {
