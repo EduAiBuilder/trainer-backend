@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { CategoriesSearchTerms } from '../../categories-search-terms/entities/categories-search-terms.entity';
 import { TrainerEntity } from '../../trainers/entities/trainer.entity';
+import { SearchTerm } from '../../search-terms/entities/search-term.entity';
 
 @Entity('categories')
 export class Category {
@@ -20,6 +20,6 @@ export class Category {
 	@JoinColumn({ name: 'trainer_id' })
 	trainer: TrainerEntity;
 
-	@OneToMany(() => CategoriesSearchTerms, (categoriesSearchTerms) => categoriesSearchTerms.category)
-	categoriesSearchTerms: CategoriesSearchTerms[];
+	@OneToMany(() => SearchTerm, (searchTerms) => searchTerms.category)
+	searchTerms: SearchTerm[];
 }

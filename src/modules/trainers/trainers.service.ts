@@ -20,7 +20,7 @@ export class TrainersService {
 	async create(createTrainerDto: TrainerInterface) {
 		const { categories, ...rest } = createTrainerDto;
 		const trainer = await this.trainerRepository.save(rest);
-		trainer.categories = await this.categoriesService.createBatch(trainer.id, categories);
+		trainer.categories = await this.categoriesService.createBatch(trainer.id, categories, createTrainerDto.userId);
 		await this.sqsService.send(SqsQueuesNamesEnum.SEARCH_IMAGES, {
 			body: { trainerId: trainer.id, userId: createTrainerDto.userId },
 			id: trainer.id.toString(),

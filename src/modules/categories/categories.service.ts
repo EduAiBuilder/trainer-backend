@@ -12,7 +12,7 @@ export class CategoriesService {
 		private readonly searchTermsService: SearchTermsService
 	) {}
 
-	async createBatch(trainerId: number, categories: CreateCategoryDto[]) {
+	async createBatch(trainerId: number, categories: CreateCategoryDto[], userId: number) {
 		const categorySearchTermsHM = {};
 		const newCategories = categories.map((category) => {
 			const { searchTerms, ...rest } = category;
@@ -21,7 +21,7 @@ export class CategoriesService {
 			return this.categoryRepository.create(newCategory);
 		});
 		const savedCategories = await this.categoryRepository.save(newCategories);
-		await this.searchTermsService.createBatch(savedCategories, categorySearchTermsHM);
+		await this.searchTermsService.createBatch(savedCategories, categorySearchTermsHM, userId);
 		return savedCategories;
 	}
 }
