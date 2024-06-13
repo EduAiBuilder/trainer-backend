@@ -16,7 +16,7 @@ export class ImagesService {
 	) {}
 
 	async searchImages(trainer: TrainerEntity, userId: string) {
-		const searchTerms = trainer.categories?.flatMap((category) => category?.categoriesSearchTerms?.map((term) => term?.searchTerm));
+		const searchTerms = trainer.categories?.flatMap((category) => category?.searchTerms);
 		if (!searchTerms?.length) {
 			throw new HttpException(`No search terms found for trainer ${trainer.id} and user ${userId}`, HttpStatus.NOT_FOUND);
 		}
@@ -45,13 +45,15 @@ export class ImagesService {
 		return this.searchTermsImagesService.createBatch(searchTermsImages);
 	}
 
-	async findImages(trainerId: string, categories: string[], userId: number, page: number, pageNumbers = 10, isRandomRequired = false) {
+	async findImages(trainerId: number, categories: string[], userId: number, page: number, pageNumbers = 10, isRandomRequired = false) {
 		const query = this.imageRepository
 			.createQueryBuilder('image')
 			.select('image')
-			.innerJoin('image.trainersCategoriesImages', 'trainerCategories')
-			.where('trainerCategories.trainer_id = :trainerId', { trainerId })
-			.andWhere('trainerCategories.user_id = :userId', { userId })
+			.innerJoin('image.searchTermsImages', 'searchTermsImages')
+			.innerJoin('searchTermsImages.searchTerm', 'searchTerm')
+			.innerJoin('searchTerm.category', 'category')
+			.where('category.trainer_id = :trainerId', { trainerId })
+			.andWhere('searchTerm.user_id = :userId', { userId })
 			.limit(pageNumbers);
 
 		if (isRandomRequired) {
@@ -66,7 +68,7 @@ export class ImagesService {
 			query.offset(page * pageNumbers);
 		}
 
-		return query.getMany();
+		return query.getRawMany();
 	}
 
 	remove(id: number) {

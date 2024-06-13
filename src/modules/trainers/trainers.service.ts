@@ -36,8 +36,7 @@ export class TrainersService {
 	async findOne(filter: FindOptionsWhere<TrainerEntity>) {
 		return this.trainerRepository.findOne({
 			where: filter,
-			relations: ['categories', 'categories.categoriesSearchTerms', 'categories.categoriesSearchTerms.searchTerm'],
-			loadEagerRelations: true,
+			relations: ['categories', 'categories.searchTerms'],
 		});
 	}
 

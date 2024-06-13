@@ -16,7 +16,7 @@ export class ImagesController {
 
 	@Get()
 	async findAll(
-		@Param('trainerId', ParseIntPipe) trainerId: string,
+		@Param('trainerId', ParseIntPipe) trainerId: number,
 		@User('userId') userId: number,
 		@Query('categories', new ParseArrayPipe({ optional: true })) categories: string[],
 		@Query('page', new ParseIntPipe({ optional: true })) page: number,
