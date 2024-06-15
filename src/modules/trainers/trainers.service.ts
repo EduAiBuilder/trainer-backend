@@ -40,6 +40,13 @@ export class TrainersService {
 		});
 	}
 
+	async findTrainersUser(filter: FindOptionsWhere<TrainerEntity>) {
+		return this.trainerRepository.findOne({
+			where: filter,
+			select: ['id', 'userId'],
+		});
+	}
+
 	async update(where: FindOptionsWhere<TrainerEntity>, updateTrainerDto: Partial<TrainerEntity>) {
 		return this.trainerRepository.update(where, updateTrainerDto);
 	}
@@ -50,5 +57,12 @@ export class TrainersService {
 		}
 		const trainer = await this.trainerRepository.findOne({ where: filter });
 		return this.trainerRepository.remove(trainer);
+	}
+
+	getImagesByCategories(trainerId: number, userId: number) {
+		return this.trainerRepository.findOne({
+			where: { id: trainerId, userId },
+			relations: ['categories', 'categories.searchTerms', 'categories.searchTerms.searchTermsImages', 'categories.searchTerms.searchTermsImages.image'],
+		});
 	}
 }

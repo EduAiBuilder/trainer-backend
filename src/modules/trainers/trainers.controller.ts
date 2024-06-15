@@ -8,6 +8,7 @@ import { User } from '../../utils/decorators/user.decorator';
 @UseGuards(JwtAuthGuard)
 @Controller('trainers')
 export class TrainersController {
+	SYSTEM_USER_ID = -1; //todo - get from env
 	constructor(private readonly trainersService: TrainersService) {}
 
 	@Post()
@@ -34,5 +35,14 @@ export class TrainersController {
 	@Delete(':id')
 	async remove(@Param('id') id: number, @User('userId') userId: number) {
 		return this.trainersService.remove({ id, userId });
+	}
+
+	@Get(':trainerId/categories/images')
+	async getImagesByCategories(@Param('trainerId') trainerId: number, @User('userId') userId: number) {
+		if (userId === this.SYSTEM_USER_ID) {
+			const trainerData = await this.trainersService.findTrainersUser({ id: trainerId });
+			userId = trainerData.userId;
+		}
+		return this.trainersService.getImagesByCategories(trainerId, userId);
 	}
 }
