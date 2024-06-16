@@ -8,6 +8,7 @@ import { TrainerEntity } from './entities/trainer.entity';
 import { Repository } from 'typeorm';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 import { CategoriesService } from '../categories/categories.service';
+import { TrainerCategoriesImagesResponseDto } from './dto/trainer-categories-images-response.dto';
 
 @Injectable()
 export class TrainersService {
@@ -59,10 +60,16 @@ export class TrainersService {
 		return this.trainerRepository.remove(trainer);
 	}
 
-	getImagesByCategories(trainerId: number, userId: number) {
-		return this.trainerRepository.findOne({
+	async getImagesByCategories(trainerId: number, userId: number): Promise<TrainerCategoriesImagesResponseDto[]> {
+		const trainersData = await this.trainerRepository.findOne({
 			where: { id: trainerId, userId },
 			relations: ['categories', 'categories.searchTerms', 'categories.searchTerms.searchTermsImages', 'categories.searchTerms.searchTermsImages.image'],
 		});
+		return trainersData.categories.flatMap((category) =>
+			category.searchTerms.map((searchTerm) => {
+				const imageUrls = searchTerm.searchTermsImages.map((searchTermImage) => searchTermImage.image.imageUrl);
+				return { category: category.name, imageUrls };
+			})
+		);
 	}
 }

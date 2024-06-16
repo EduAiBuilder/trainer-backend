@@ -4,6 +4,7 @@ import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../../utils/decorators/user.decorator';
+import { TrainerCategoriesImagesResponseDto } from './dto/trainer-categories-images-response.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('trainers')
@@ -38,7 +39,7 @@ export class TrainersController {
 	}
 
 	@Get(':trainerId/categories/images')
-	async getImagesByCategories(@Param('trainerId') trainerId: number, @User('userId') userId: number) {
+	async getImagesByCategories(@Param('trainerId') trainerId: number, @User('userId') userId: number): Promise<TrainerCategoriesImagesResponseDto[]> {
 		if (userId === this.SYSTEM_USER_ID) {
 			const trainerData = await this.trainersService.findTrainersUser({ id: trainerId });
 			userId = trainerData.userId;
