@@ -46,13 +46,6 @@ export class AuthService {
 		// send email
 	}
 
-	private async validateUserExistence(where: FindOptionsWhere<UserEntity>) {
-		const user = await this.userService.findOne(where);
-		if (user) {
-			throw new Error(`The user with this ${Object.keys(where)[0]} already exists`);
-		}
-	}
-
 	async registerByCode(verifyCodeDto: VerifyCodeDto) {
 		const verifyCode = await this.verifyCodeService.checkVerifyCode(verifyCodeDto);
 		let update;
@@ -72,5 +65,12 @@ export class AuthService {
 	generateToken(user: UserEntity) {
 		const payload = { sub: user.id };
 		return this.jwtService.sign(payload);
+	}
+
+	private async validateUserExistence(where: FindOptionsWhere<UserEntity>) {
+		const user = await this.userService.findOne(where);
+		if (user) {
+			throw new Error(`The user with this ${Object.keys(where)[0]} already exists`);
+		}
 	}
 }
