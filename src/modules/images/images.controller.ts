@@ -18,7 +18,7 @@ export class ImagesController {
 	async findAll(
 		@Param('trainerId', ParseIntPipe) trainerId: number,
 		@User('userId') userId: number,
-		@Query('categories', new ParseArrayPipe({ optional: true })) categories: string[],
+		@Query('categories', new ParseArrayPipe({ optional: true })) categories: number[],
 		@Query('page', new ParseIntPipe({ optional: true })) page: number,
 		@Query('pageNumbers', new ParseIntPipe({ optional: true })) pageNumbers: number,
 		@Query('isRandomRequired') isRandomRequired: boolean
