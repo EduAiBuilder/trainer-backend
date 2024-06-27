@@ -8,14 +8,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class SearchTermsService {
 	constructor(@InjectRepository(SearchTerm) private readonly searchTermsRepository: Repository<SearchTerm>) {}
 
-	async createBatch(savedCategories: Category[], categorySearchTermsHM: Record<string, string[]>, userId: number) {
+	async createBatch(savedCategories: Category[], categorySearchTermsHM: Record<string, string[]>, userId: number, trainerId: number) {
 		const newSearchTerms = savedCategories
 			.map((category) => {
 				return categorySearchTermsHM[category.name].map((searchTerm) => {
 					const newSearchTerm: Partial<SearchTerm> = {
 						name: searchTerm,
-						createdBy: userId,
 						userId,
+						trainerId,
 						categoryId: category.id,
 					};
 					return this.searchTermsRepository.create(newSearchTerm);

@@ -13,11 +13,11 @@ export class SearchTerm {
 	@Column({ type: 'int', width: 11, name: 'category_id' })
 	categoryId: number;
 
-	@Column({ type: 'int', width: 11, name: 'created_by' })
-	createdBy: number;
-
 	@Column({ type: 'int', width: 11, name: 'user_id' })
 	userId: number;
+
+	@Column({ type: 'int', width: 11, name: 'trainer_id' })
+	trainerId: number;
 
 	@OneToMany(() => SearchTermsImages, (searchTermsImages) => searchTermsImages.searchTerm)
 	searchTermsImages: SearchTermsImages[];

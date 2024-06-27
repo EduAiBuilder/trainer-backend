@@ -21,7 +21,7 @@ export class CategoriesService {
 			return this.categoryRepository.create(newCategory);
 		});
 		const savedCategories = await this.categoryRepository.save(newCategories);
-		await this.searchTermsService.createBatch(savedCategories, categorySearchTermsHM, userId);
+		await this.searchTermsService.createBatch(savedCategories, categorySearchTermsHM, userId, trainerId);
 		return savedCategories;
 	}
 }

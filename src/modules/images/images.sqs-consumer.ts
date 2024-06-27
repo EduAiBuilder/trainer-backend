@@ -20,7 +20,7 @@ export class ImagesSqsConsumer {
 			if (!trainer) {
 				throw new HttpException(`Trainer ${trainerId} not found for user ${userId}`, HttpStatus.NOT_FOUND);
 			}
-			return this.imagesService.searchImages(trainer, userId);
+			return await this.imagesService.searchImages(trainer, userId);
 		} catch (e) {
 			console.log(`can't search images for trainerId ${trainerId} and userId ${userId}`);
 		}

@@ -14,7 +14,7 @@ export class ImageEntity {
 	updatedAt: Date;
 
 	@Column({ type: 'varchar', length: 100, name: 'created_by' })
-	createdBy: string;
+	createdBy: number;
 
 	@Column({ type: 'varchar', length: 1024, name: 'image_url' })
 	imageUrl: string;

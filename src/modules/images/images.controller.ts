@@ -10,7 +10,7 @@ export class ImagesController {
 	constructor(private readonly imagesService: ImagesService) {}
 
 	@Post()
-	create(@Body() createImageDto: CreateImageDto, @User('userId') userId: string) {
+	create(@Body() createImageDto: CreateImageDto, @User('userId') userId: number) {
 		return this.imagesService.create({ ...createImageDto, createdBy: userId });
 	}
 
