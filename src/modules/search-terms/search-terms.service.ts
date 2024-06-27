@@ -13,7 +13,7 @@ export class SearchTermsService {
 			.map((category) => {
 				return categorySearchTermsHM[category.name].map((searchTerm) => {
 					const newSearchTerm: Partial<SearchTerm> = {
-						name: searchTerm,
+						name: searchTerm.toLowerCase(),
 						userId,
 						trainerId,
 						categoryId: category.id,
