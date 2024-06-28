@@ -75,4 +75,32 @@ export class TrainersService {
 			})
 		);
 	}
+
+	async validateTrainingReady(trainerId: number, userId: number) {
+		const trainer = await this.trainerRepository
+			.createQueryBuilder('trainer')
+			.leftJoin('trainer.categories', 'category')
+			.leftJoin('category.searchTerms', 'searchTerm')
+			.leftJoin('searchTerm.searchTermsImages', 'searchTermsImage')
+			.where('trainer.id = :trainerId', { trainerId })
+			.andWhere('trainer.userId = :userId', { userId })
+			.groupBy('trainer.id')
+			.addGroupBy('category.id')
+			.having('COUNT(searchTermsImage.id) >= 150 AND COUNT(category.id) >= 2')
+			.select('trainer.id', 'trainerId')
+			.addSelect('COUNT(category.id)', 'categoryCount')
+			.getRawOne();
+
+		if (!trainer) {
+			throw new HttpException('Trainer is not ready for training', HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	async train(trainerId: number) {
+		await this.sqsService.send(SqsQueuesNamesEnum.TRAIN_MODEL, {
+			body: { trainerId },
+			id: trainerId.toString(),
+			groupId: MessageGroupsIdsEnum.TRAINING,
+		});
+	}
 }

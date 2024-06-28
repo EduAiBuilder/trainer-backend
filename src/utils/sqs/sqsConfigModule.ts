@@ -13,9 +13,10 @@ import { sqsConfig } from '../configs/sqs.config';
 
 			useFactory: (configService: ConfigService) => {
 				const searchImagesQueueConfig = configService.get('sqs.searchImages');
+				const trainModelQueueConfig = configService.get('sqs.trainModel');
 				return {
 					consumers: [searchImagesQueueConfig],
-					producers: [searchImagesQueueConfig],
+					producers: [searchImagesQueueConfig, trainModelQueueConfig],
 				};
 			},
 			inject: [ConfigService],

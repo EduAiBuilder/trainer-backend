@@ -46,4 +46,10 @@ export class TrainersController {
 		}
 		return this.trainersService.getImagesByCategories(trainerId, userId);
 	}
+
+	@Post(':trainerId/train')
+	async train(@Param('trainerId') trainerId: number, @User('userId') userId: number) {
+		await this.trainersService.validateTrainingReady(trainerId, userId);
+		return this.trainersService.train(trainerId);
+	}
 }
