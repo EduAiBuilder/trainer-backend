@@ -26,7 +26,10 @@ export class BingService {
 	> {
 		const searchTermImages: { images: ProviderImageResponseInterface[]; searchTermId: number }[] = [];
 		for (const searchTerm of searchTerms) {
-			const searchTermImage = { images: await this.getImagesFromBingApi(searchTerm.name), searchTermId: searchTerm.id };
+			const searchTermImage = {
+				images: await this.getImagesFromBingApi(searchTerm.name),
+				searchTermId: searchTerm.id,
+			};
 			searchTermImages.push(searchTermImage);
 		}
 		return searchTermImages;
@@ -62,6 +65,7 @@ export class BingService {
 					count,
 					min_height: 128,
 					min_width: 128,
+					adlt_set: 'Strict',
 				},
 			})
 		);
