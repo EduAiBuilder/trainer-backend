@@ -37,8 +37,7 @@ export class ImagesService {
 			.select('image')
 			.innerJoin('image.searchTermsImages', 'searchTermsImages')
 			.innerJoin('searchTermsImages.searchTerm', 'searchTerm')
-			.innerJoin('searchTerm.category', 'category')
-			.where('category.trainer_id = :trainerId', { trainerId })
+			.where('searchTerm.trainer_id = :trainerId', { trainerId })
 			.andWhere('searchTerm.user_id = :userId', { userId })
 			.limit(pageNumbers)
 			.select('image.id as id, image.image_url as url, image.thumbnail_url as thumbnailUrl, image.source as source');
@@ -151,12 +150,14 @@ export class ImagesService {
 			})
 			.getRawMany();
 
-		const searchTermsImagesToSave = searchTermsImages.map((searchTermImage) => {
-			return {
-				imageId: searchTermImage.imageId,
-				searchTermId: nameSearchTermMap[searchTermImage.searchTermName].id,
-			};
-		});
+		const searchTermsImagesToSave = searchTermsImages
+			.map((searchTermImage) => {
+				return {
+					imageId: searchTermImage.imageId,
+					searchTermId: nameSearchTermMap[searchTermImage.searchTermName]?.id,
+				};
+			})
+			.filter((searchTermImage) => searchTermImage.searchTermId);
 
 		return this.searchTermsImagesService.createBatch(searchTermsImagesToSave);
 	}
