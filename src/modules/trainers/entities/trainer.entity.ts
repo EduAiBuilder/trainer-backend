@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { Category } from '../../categories/entities/category.entity';
+import { ModelEntity } from '../../models/entities/model.entity';
 
 @Entity('trainers')
 export class TrainerEntity {
@@ -28,4 +29,7 @@ export class TrainerEntity {
 
 	@OneToMany(() => Category, (category) => category.trainer)
 	categories: Category[];
+
+	@OneToMany(() => ModelEntity, (model) => model.trainer)
+	models: ModelEntity[];
 }
