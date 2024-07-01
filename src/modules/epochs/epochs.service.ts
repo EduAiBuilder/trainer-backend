@@ -8,7 +8,7 @@ import { CreateEpochDto } from './dtos/create-epoch.dto';
 export class EpochsService {
 	constructor(@InjectRepository(EpochEntity) private readonly modelRepository: Repository<EpochEntity>) {}
 
-	async createMany(epochs: CreateEpochDto[], id) {
-		return await this.modelRepository.save(epochs.map((epoch) => ({ ...epoch, modelId: id })));
+	async create(epoch: CreateEpochDto, modelId: number) {
+		return await this.modelRepository.save({ ...epoch, modelId });
 	}
 }
