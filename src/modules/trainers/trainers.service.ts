@@ -96,9 +96,9 @@ export class TrainersService {
 		}
 	}
 
-	async train(trainerId: number) {
+	async sendTrainMessageToQueue(trainerId: number, modelKey: string, modelId: number) {
 		await this.sqsService.send(SqsQueuesNamesEnum.TRAIN_MODEL, {
-			body: { trainerId },
+			body: { trainerId, modelKey, modelId },
 			id: trainerId.toString(),
 			groupId: MessageGroupsIdsEnum.TRAINING,
 		});

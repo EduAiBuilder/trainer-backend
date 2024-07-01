@@ -5,12 +5,13 @@ import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../../utils/decorators/user.decorator';
 import { TrainerCategoriesImagesResponseDto } from './dto/trainer-categories-images-response.dto';
+import { ModelsService } from '../models/models.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('trainers')
 export class TrainersController {
 	SYSTEM_USER_ID = -1; //todo - get from env
-	constructor(private readonly trainersService: TrainersService) {}
+	constructor(private readonly trainersService: TrainersService, private modelsService: ModelsService) {}
 
 	@Post()
 	async create(@Body() createTrainerDto: CreateTrainerDto, @User('userId') userId: number) {
@@ -50,6 +51,7 @@ export class TrainersController {
 	@Post(':trainerId/train')
 	async train(@Param('trainerId') trainerId: number, @User('userId') userId: number) {
 		await this.trainersService.validateTrainingReady(trainerId, userId);
-		return this.trainersService.train(trainerId);
+		const model = await this.modelsService.create(trainerId);
+		return this.trainersService.sendTrainMessageToQueue(trainerId, model.key, model.id);
 	}
 }

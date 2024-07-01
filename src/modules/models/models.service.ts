@@ -7,7 +7,8 @@ import { Repository } from 'typeorm';
 export class ModelsService {
 	constructor(@InjectRepository(ModelEntity) private readonly modelRepository: Repository<ModelEntity>) {}
 
-	async create(restModel: Omit<any, 'epochs'>) {
-		return await this.modelRepository.save(restModel);
+	async create(trainerId: number) {
+		const key = Math.random().toString(36).substring(2, 10);
+		return await this.modelRepository.save({ key, trainerId });
 	}
 }
