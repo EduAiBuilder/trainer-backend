@@ -6,9 +6,10 @@ import { SqsConfigModule } from '../../utils/sqs/sqsConfigModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TrainerEntity } from './entities/trainer.entity';
 import { CategoriesModule } from '../categories/categories.module';
+import { ModelsModule } from '../models/models.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([TrainerEntity]), AuthModule, SqsConfigModule, CategoriesModule],
+	imports: [TypeOrmModule.forFeature([TrainerEntity]), AuthModule, SqsConfigModule, CategoriesModule, ModelsModule],
 	controllers: [TrainersController],
 	providers: [TrainersService],
 	exports: [TrainersService],
