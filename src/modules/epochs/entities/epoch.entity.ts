@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ModelEntity } from '../../models/entities/model.entity';
 
 @Entity('epochs')
@@ -21,20 +21,14 @@ export class EpochEntity {
 	@Column({ type: 'float', name: 'val_loss_value' })
 	valLossValue: number;
 
-	@Column({ type: 'float', name: 'val_accuracy_value' })
-	valAccuracyValue: number;
-
 	@Column({ type: 'float', name: 'learning_rate' })
 	learningRate: number;
 
-	@Column({ type: 'float', name: 'time_elapsed' })
-	timeElapsed: number;
+	@Column({ type: 'float', name: 'training_time' })
+	trainingTime: number;
 
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;
-
-	@UpdateDateColumn({ name: 'updated_at' })
-	updatedAt: Date;
 
 	@ManyToOne(() => ModelEntity, (model) => model.epochs)
 	@JoinColumn({ name: 'model_id' })
